@@ -1,73 +1,81 @@
-# story_reader
-
-|____core
-| |____network
-| | |____api_client.dart
-| | |____endpoints.dart
-| |____utils
-| | |____constants.dart
-| | |____date_formatter.dart
-| | |____string_extensions.dart
-| |____error
-| | |____exceptions.dart
-| | |____failure.dart
-| |____theme
-| | |____app_colors.dart
-| | |____app_text_styles.dart
-|____app
-| |____app_bloc_observer.dart
-| |____app.dart
-|____main.dart
-|____feature
-| |____home
-| | |____presentation
-| | | |____pages
-| | | | |____home_page.dart
-| | | |____widgets
-| | | | |____story_card.dart
-| | | |____bloc
-| | | | |____home_bloc.dart
-| | | | |____home_event.dart
-| | | | |____home_state.dart
-| |____story_details
-| | |____presentation
-| | | |____pages
-| | | | |____story_details_page.dart
-| | | |____widgets
-| | | | |____chapter_list_item.dart
-| | | |____bloc
-| | | | |____story_details_bloc.dart
-| | | | |____story_details_event.dart
-| | | | |____story_details_state.dart
-| |____reader
-| | |____presentation
-| | | |____pages
-| | | | |____reader_page.dart
-| | | |____widgets
-| | | | |____text_content.dart
-| | | |____bloc
-| | | | |____reader_bloc.dart
-| | | | |____reader_event.dart
-| | | | |____reader_state.dart
-|____data
-| |____repositories
-| | |____story_repository_impl.dart
-| |____datasources
-| | |____remote
-| | | |____story_remote_data_source.dart
-| | |____local
-| | | |____story_local_data_source.dart
-| |____models
-| | |____story_model.dart
-| | |____chapter_model.dart
-|____domain
-| |____entities
-| | |____story.dart
-| | |____chapter.dart
-| |____repositories
-| | |____story_repository.dart
-| |____usecases
-| | |____get_stories.dart
-| | |____get_story_details.dart
-| | |____get_chapter_content.dart
-|____injection_container.dart
+story_reader
+│
+├── core
+│   ├── network
+│   │   ├── api_client.dart
+│   │   └── endpoints.dart
+│   ├── utils
+│   │   ├── constants.dart
+│   │   ├── date_formatter.dart
+│   │   └── string_extensions.dart
+│   ├── error
+│   │   ├── exceptions.dart
+│   │   └── failure.dart
+│   └── theme
+│       ├── app_colors.dart
+│       └── app_text_styles.dart
+│
+├── app
+│   ├── app_bloc_observer.dart
+│   └── app.dart
+│
+├── main.dart
+│
+├── feature
+│   ├── home
+│   │   └── presentation
+│   │       ├── pages
+│   │       │   └── home_page.dart
+│   │       ├── widgets
+│   │       │   └── story_card.dart
+│   │       └── bloc
+│   │           ├── home_bloc.dart
+│   │           ├── home_event.dart
+│   │           └── home_state.dart
+│   │
+│   ├── story_details
+│   │   └── presentation
+│   │       ├── pages
+│   │       │   └── story_details_page.dart
+│   │       ├── widgets
+│   │       │   └── chapter_list_item.dart
+│   │       └── bloc
+│   │           ├── story_details_bloc.dart
+│   │           ├── story_details_event.dart
+│   │           └── story_details_state.dart
+│   │
+│   └── reader
+│       └── presentation
+│           ├── pages
+│           │   └── reader_page.dart
+│           ├── widgets
+│           │   └── text_content.dart
+│           └── bloc
+│               ├── reader_bloc.dart
+│               ├── reader_event.dart
+│               └── reader_state.dart
+│
+├── data
+│   ├── repositories
+│   │   └── story_repository_impl.dart
+│   ├── datasources
+│   │   ├── remote
+│   │   │   └── story_remote_data_source.dart
+│   │   └── local
+│   │       └── story_local_data_source.dart
+│   └── models
+│       ├── story_model.dart
+│       └── chapter_model.dart
+│
+├── domain
+│   ├── entities
+│   │   ├── story.dart
+│   │   └── chapter.dart
+│   ├── repositories
+│   │   └── story_repository.dart
+│   └── usecases
+│       ├── get_stories.dart
+│       ├── get_story_details.dart
+│       └── get_chapter_content.dart
+│
+└── injection_container.dart
