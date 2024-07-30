@@ -12,7 +12,7 @@ class ApiClient {
     _dio.options.connectTimeout = const Duration(seconds: 5);
     _dio.options.receiveTimeout = const Duration(seconds: 3);
     _dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
+      requestHeader: false,
       requestBody: true,
       responseHeader: true,
       responseBody: false,
@@ -70,28 +70,27 @@ class ApiClient {
     if (error is DioException) {
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
-          return NetworkException(
-            'Connection timeout',
-          );
         case DioExceptionType.sendTimeout:
-          return NetworkException(
-            'Send timeout',
-          );
         case DioExceptionType.receiveTimeout:
-          return NetworkException(
-            'Receive timeout',
-          );
+          return NetworkException('Connection timeout');
         case DioExceptionType.badResponse:
-          return NetworkException(
-              'Bad response: ${error.response?.statusCode}');
+          switch (error.response?.statusCode) {
+            case 400:
+              return BadRequestException(error.response?.data['message']);
+            case 401:
+              return UnauthorizedException(error.response?.data['message']);
+            case 404:
+              return NotFoundException(error.response?.data['message']);
+            case 500:
+              return ServerException(error.response?.data['message']);
+            default:
+              return NetworkException(
+                  'Bad response: ${error.response?.statusCode}');
+          }
         case DioExceptionType.cancel:
-          return NetworkException(
-            'Request cancelled',
-          );
+          return NetworkException('Request cancelled');
         default:
-          return NetworkException(
-            'Unexpected error occurred',
-          );
+          return NetworkException('Unexpected error occurred');
       }
     } else {
       return NetworkException('Unexpected error: $error');

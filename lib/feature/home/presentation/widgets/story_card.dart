@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_reader/core/widgets/cached_image_widget.dart';
 import 'package:story_reader/data/models/story_model.dart';
 
 class StoryCard extends StatelessWidget {
@@ -21,13 +22,9 @@ class StoryCard extends StatelessWidget {
               height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    story.coverImage ?? '',
-                  ),
-                  fit: BoxFit.cover,
-                ),
               ),
+              clipBehavior: Clip.antiAlias,
+              child: CachedImageWidget(imageUrl: story.coverImage ?? ''),
             ),
             const SizedBox(width: 16.0),
             Expanded(
