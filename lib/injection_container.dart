@@ -24,7 +24,7 @@ Future<void> initDependencyInjection() async {
   sl.registerLazySingleton<StoryRepository>(
     () => StoryRepositoryImpl(
       remoteDataSource: sl<StoryRemoteDataSource>(),
-      localDataSource: sl<StoryLocalDataSource>(),
+      // localDataSource: sl<StoryLocalDataSource>(),
     ),
   );
 

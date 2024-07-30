@@ -56,3 +56,11 @@ class UnexpectedException extends AppException {
   UnexpectedException([super.message = 'An unexpected error occurred'])
       : super(code: 'UNEXPECTED_ERROR');
 }
+
+class BadRequestException extends AppException {
+  BadRequestException([super.message = 'Bad request']);
+}
+
+class UnauthorizedException extends AppException {
+  UnauthorizedException([super.message = 'Unauthorized']);
+}

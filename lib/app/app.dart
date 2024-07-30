@@ -12,6 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Story App',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         primaryColor: AppColors.primary,
         hintColor: AppColors.accent,

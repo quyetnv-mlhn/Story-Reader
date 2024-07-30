@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_reader/core/widgets/cached_image_widget.dart';
 import 'package:story_reader/data/models/story_model.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/feature/home/presentation/bloc/home_bloc.dart';
@@ -79,18 +80,25 @@ class HomePage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    story.coverImage ?? '',
-                  ),
-                  fit: BoxFit.cover,
-                ),
               ),
-              child: Center(
-                child: Text(
-                  story.title ?? '',
-                  style: const TextStyle(fontSize: 18.0, color: Colors.white),
-                ),
+              child: Stack(
+                children: [
+                  CachedImageWidget(imageUrl: story.coverImage ?? ''),
+                  Center(
+                    child: Container(
+                      color: Colors.black54,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        story.title ?? '',
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },

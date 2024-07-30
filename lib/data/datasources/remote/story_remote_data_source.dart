@@ -1,14 +1,13 @@
-import 'package:story_reader/core/error/failures.dart';
 import 'package:story_reader/core/network/api_client.dart';
 import 'package:story_reader/core/network/endpoints.dart';
-import '../../../core/error/exceptions.dart';
+import 'package:story_reader/core/utils/network_utils.dart';
 import '../../models/story_model.dart';
 
 abstract class StoryRemoteDataSource {
-  Future<List<Story>> getStories();
-  Future<List<Story>> getStoriesPaginated(int page, int pageSize);
-  Future<List<Story>> searchStories(String query);
-  Future<Story> getStoryDetails(String storyId);
+  Future<Result<List<Story>>> getStories();
+  Future<Result<List<Story>>> getStoriesPaginated(int page, int pageSize);
+  Future<Result<List<Story>>> searchStories(String query);
+  Future<Result<Story>> getStoryDetails(String storyId);
   // Future<List<Chapter>> getChapters(String storyId);
   // Future<Chapter> getChapterContent(String chapterId);
 }
@@ -20,8 +19,8 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
       : _apiClient = apiClient;
 
   @override
-  Future<List<Story>> getStories() async {
-    return _handleRequest(() async {
+  Future<Result<List<Story>>> getStories() async {
+    return handleRequest(() async {
       final response = await _apiClient.get(Endpoints.getStories);
       return (response.data as List)
           .map((json) => Story.fromMap(json))
@@ -30,8 +29,9 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<List<Story>> getStoriesPaginated(int page, int pageSize) async {
-    return _handleRequest(() async {
+  Future<Result<List<Story>>> getStoriesPaginated(
+      int page, int pageSize) async {
+    return handleRequest(() async {
       final response = await _apiClient.get(
         Endpoints.getStories,
         queryParameters: {'page': page, 'pageSize': pageSize},
@@ -43,8 +43,8 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<List<Story>> searchStories(String query) async {
-    return _handleRequest(() async {
+  Future<Result<List<Story>>> searchStories(String query) async {
+    return handleRequest(() async {
       final response = await _apiClient
           .get('/stories/search', queryParameters: {'query': query});
       return (response.data as List)
@@ -54,8 +54,8 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<Story> getStoryDetails(String storyId) async {
-    return _handleRequest(() async {
+  Future<Result<Story>> getStoryDetails(String storyId) async {
+    return handleRequest(() async {
       final response = await _apiClient.get('/stories/$storyId');
       return Story.fromMap(response.data);
     });
@@ -63,7 +63,7 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
 
   // @override
   // Future<List<Chapter>> getChapters(String storyId) async {
-  //   return _handleRequest(() async {
+  //   return handleRequest(() async {
   //     final response = await apiClient.get('/stories/$storyId/chapters');
   //     return (response.data as List).map((json) => Chapter.fromMap(json)).toList();
   //   });
@@ -71,19 +71,9 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
 
   // @override
   // Future<Chapter> getChapterContent(String chapterId) async {
-  //   return _handleRequest(() async {
+  //   return handleRequest(() async {
   //     final response = await apiClient.get('/chapters/$chapterId');
   //     return Chapter.fromMap(response.data);
   //   });
   // }
-
-  Future<T> _handleRequest<T>(Future<T> Function() request) async {
-    try {
-      return await request();
-    } on NetworkException catch (e) {
-      throw NetworkFailure(e.message);
-    } catch (e) {
-      throw UnexpectedFailure();
-    }
-  }
 }

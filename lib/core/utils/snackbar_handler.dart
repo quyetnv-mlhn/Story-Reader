@@ -31,6 +31,7 @@ class SnackBarHandler {
         SnackBar(
           content: Text(message),
           backgroundColor: backgroundColor,
+          duration: const Duration(seconds: 3),
         ),
       );
     }

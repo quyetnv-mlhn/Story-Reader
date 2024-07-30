@@ -1,51 +1,55 @@
-import 'package:story_reader/data/datasources/local/story_local_data_source.dart';
+import 'package:story_reader/core/utils/network_utils.dart';
 import 'package:story_reader/data/datasources/remote/story_remote_data_source.dart';
 import 'package:story_reader/data/models/story_model.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
+import 'package:story_reader/core/utils/snackbar_handler.dart';
 
 class StoryRepositoryImpl implements StoryRepository {
   final StoryRemoteDataSource remoteDataSource;
-  final StoryLocalDataSource localDataSource;
-  // final NetworkInfo networkInfo;
 
-  StoryRepositoryImpl({
-    required this.remoteDataSource,
-    required this.localDataSource,
-    // required this.networkInfo,
-  });
+  StoryRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<Story>> getStories() async {
-    // if (await networkInfo.isConnected) {
-    if (true) {
-      try {
-        final remoteStories = await remoteDataSource.getStories();
-        // localDataSource.cacheStories(remoteStories);
-        return remoteStories;
-      } catch (e) {
-        print(e);
-        return localDataSource.getCachedStories();
-      }
-    } else {
-      return localDataSource.getCachedStories();
+  Future<Result<List<Story>>> getStories() async {
+    final result = await remoteDataSource.getStories();
+    return result.fold(
+      (stories) => Result.success(stories),
+      (error) {
+        SnackBarHandler.showError('Failed to fetch stories: ${error.message}');
+        return Result.failure(error);
+      },
+    );
+  }
+
+  @override
+  Future<Result<List<Story>>> getStoriesPaginated(
+      int page, int pageSize) async {
+    try {
+      return await remoteDataSource.getStoriesPaginated(page, pageSize);
+    } catch (e) {
+      SnackBarHandler.showError('Failed to fetch paginated stories: $e');
+      throw Exception('Failed to fetch paginated stories');
     }
   }
 
   @override
-  Future<List<Story>> getStoriesPaginated(int page, int pageSize) async {
-    return remoteDataSource.getStoriesPaginated(page, pageSize);
+  Future<Result<Story>> getStoryDetails(String storyId) async {
+    try {
+      return await remoteDataSource.getStoryDetails(storyId);
+    } catch (e) {
+      SnackBarHandler.showError('Failed to fetch story details: $e');
+      throw Exception('Failed to fetch story details');
+    }
   }
 
   @override
-  Future<Story> getStoryDetails(String storyId) {
-    // TODO: implement getStoryDetails
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Story>> searchStories(String query) {
-    // TODO: implement searchStories
-    throw UnimplementedError();
+  Future<Result<List<Story>>> searchStories(String query) async {
+    try {
+      return await remoteDataSource.searchStories(query);
+    } catch (e) {
+      SnackBarHandler.showError('Failed to search stories: $e');
+      throw Exception('Failed to search stories');
+    }
   }
 
 // Implement other methods similarly...
