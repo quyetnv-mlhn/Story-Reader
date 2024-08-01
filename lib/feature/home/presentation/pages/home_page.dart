@@ -7,6 +7,7 @@ import 'package:story_reader/feature/home/presentation/bloc/home_state.dart';
 import 'package:story_reader/feature/home/presentation/widgets/search_stories_bar.dart';
 import 'package:story_reader/injection_container.dart';
 
+import '../../../../core/widgets/custom_app_bar.dart';
 import '../widgets/featured_stories.dart';
 import '../widgets/paginated_story_list.dart';
 import '../widgets/recently_updated_stories.dart';
@@ -30,7 +31,7 @@ class HomePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Story Reader')),
+      appBar: const CustomAppBar(),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading) {

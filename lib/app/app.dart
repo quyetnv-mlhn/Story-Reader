@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:story_reader/core/theme/app_colors.dart';
 import 'package:story_reader/feature/home/presentation/pages/home_page.dart';
 
 class App extends StatelessWidget {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
+  final ThemeData theme;
+  final ThemeData darkTheme;
 
-  const App({super.key, required this.scaffoldMessengerKey});
+  const App({
+    super.key,
+    required this.scaffoldMessengerKey,
+    required this.theme,
+    required this.darkTheme,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +19,8 @@ class App extends StatelessWidget {
       title: 'Flutter Story App',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      theme: ThemeData(
-        primaryColor: AppColors.primary,
-        hintColor: AppColors.accent,
-        scaffoldBackgroundColor: AppColors.background,
-      ),
+      theme: theme,
+      darkTheme: darkTheme,
       home: const HomePage(),
     );
   }
