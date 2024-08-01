@@ -38,10 +38,10 @@ class FeaturedStories extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         story.title ?? '',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                     ),
