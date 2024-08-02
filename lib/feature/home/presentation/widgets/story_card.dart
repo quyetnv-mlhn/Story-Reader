@@ -10,11 +10,8 @@ class StoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: InkWell(
-        onTap: () {
-          // Xử lý sự kiện khi nhấn vào card, ví dụ như chuyển đến trang chi tiết câu chuyện.
-        },
+        onTap: () {},
         child: Row(
           children: [
             Container(

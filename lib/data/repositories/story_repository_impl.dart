@@ -1,6 +1,7 @@
 import 'package:story_reader/core/utils/network_utils.dart';
 import 'package:story_reader/data/datasources/remote/story_remote_data_source.dart';
 import 'package:story_reader/data/models/story_model.dart';
+import 'package:story_reader/data/params/search_stories_param.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/core/utils/snackbar_handler.dart';
 
@@ -43,9 +44,11 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<List<Story>>> searchStories(String query) async {
+  Future<Result<List<Story>>> searchStories(
+    SearchStoriesParam searchStoriesParam,
+  ) async {
     try {
-      return await remoteDataSource.searchStories(query);
+      return await remoteDataSource.searchStories(searchStoriesParam);
     } catch (e) {
       SnackBarHandler.showError('Failed to search stories: $e');
       throw Exception('Failed to search stories');

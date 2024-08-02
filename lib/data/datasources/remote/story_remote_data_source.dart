@@ -1,12 +1,14 @@
 import 'package:story_reader/core/network/api_client.dart';
 import 'package:story_reader/core/network/endpoints.dart';
 import 'package:story_reader/core/utils/network_utils.dart';
+import 'package:story_reader/data/params/search_stories_param.dart';
 import '../../models/story_model.dart';
 
 abstract class StoryRemoteDataSource {
   Future<Result<List<Story>>> getStories();
   Future<Result<List<Story>>> getStoriesPaginated(int page, int pageSize);
-  Future<Result<List<Story>>> searchStories(String query);
+  Future<Result<List<Story>>> searchStories(
+      SearchStoriesParam searchStoriesParam);
   Future<Result<Story>> getStoryDetails(String storyId);
   // Future<List<Chapter>> getChapters(String storyId);
   // Future<Chapter> getChapterContent(String chapterId);
@@ -43,10 +45,12 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<Result<List<Story>>> searchStories(String query) async {
+  Future<Result<List<Story>>> searchStories(
+    SearchStoriesParam searchStoriesParam,
+  ) async {
     return handleRequest(() async {
-      final response = await _apiClient
-          .get('/stories/search', queryParameters: {'query': query});
+      final response = await _apiClient.get('/stories/search',
+          queryParameters: searchStoriesParam.toMap());
       return (response.data as List)
           .map((json) => Story.fromMap(json))
           .toList();

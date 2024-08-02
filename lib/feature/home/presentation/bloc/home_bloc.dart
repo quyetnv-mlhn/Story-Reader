@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_reader/data/params/search_stories_param.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -8,7 +9,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc({required this.storyRepository}) : super(HomeInitial()) {
     on<LoadHomeData>(_onLoadHomeData);
-    // on<SearchStories>(_onSearchStories);
+    on<SearchStories>(_onSearchStories);
     // on<ChangePage>(_onChangePage);
   }
 
@@ -31,22 +32,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  // Future<void> _onSearchStories(
-  //     SearchStories event, Emitter<HomeState> emit) async {
-  //   emit(HomeLoading());
-  //   try {
-  //     final searchResults = await storyRepository.searchStories(event.query);
-  //     emit(HomeLoaded(
-  //       featuredStories: const [], // Không có featured stories trong kết quả tìm kiếm
-  //       paginatedStories: searchResults,
-  //       recentlyUpdatedStories: const [], // Không có recently updated stories trong kết quả tìm kiếm
-  //       currentPage: 1,
-  //       totalPages: (searchResults.length / 10).ceil(),
-  //     ));
-  //   } catch (e) {
-  //     emit(HomeError(e.toString()));
-  //   }
-  // }
+  Future<void> _onSearchStories(
+    SearchStories event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(HomeLoading());
+
+    final searchParam = SearchStoriesParam(
+      title: event.title,
+      author: event.author,
+    );
+    final searchResults = await storyRepository.searchStories(searchParam);
+
+    searchResults.fold(
+      (result) => emit(HomeLoaded(
+        featuredStories: const [],
+        paginatedStories: result,
+        recentlyUpdatedStories: const [],
+        currentPage: 1,
+        totalPages: (result.length / 10).ceil(),
+      )),
+      (error) => emit(HomeError(error.toString())),
+    );
+  }
 
   // Future<void> _onChangePage(ChangePage event, Emitter<HomeState> emit) async {
   //   if (state is HomeLoaded) {

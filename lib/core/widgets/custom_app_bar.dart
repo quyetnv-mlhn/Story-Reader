@@ -12,9 +12,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: Image.asset(
         Assets.images.logo.path,
         fit: BoxFit.contain,
+        height: height,
       ),
       centerTitle: true,
-      // title: ,
     );
   }
 
