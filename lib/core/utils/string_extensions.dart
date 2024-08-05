@@ -3,5 +3,5 @@ extension StringExtensions on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 
-  String get hardCodedString => this;
+  String get hardCoded => this;
 }

@@ -45,12 +45,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final searchResults = await storyRepository.searchStories(searchParam);
 
     searchResults.fold(
-      (result) => emit(HomeLoaded(
-        featuredStories: const [],
-        paginatedStories: result,
-        recentlyUpdatedStories: const [],
-        currentPage: 1,
-        totalPages: (result.length / 10).ceil(),
+      (result) => emit(HomeSearchLoaded(
+        searchResults: result,
+        currentPage: 1, // Update as needed
+        totalPages: 1, // Update as needed
       )),
       (error) => emit(HomeError(error.toString())),
     );

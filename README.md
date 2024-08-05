@@ -1,3 +1,10 @@
+# Story Reader App
+
+A Flutter application for reading stories, implementing a layered architecture with BLoC for state management.
+
+## Project Structure
+
+```
 story_reader
 │
 ├── core
@@ -79,3 +86,33 @@ story_reader
 │       └── get_chapter_content.dart
 │
 └── injection_container.dart
+```
+
+## Setup and Installation
+
+To get started with the Story Reader app, clone the repository and follow these steps:
+
+1. **Clone the Repository**:
+    ```sh
+    git clone <repository_url>
+    cd story_reader
+    ```
+
+2. **Install Dependencies**:
+    ```sh
+    flutter pub get
+    ```
+
+3. **Run the App**:
+    ```sh
+    flutter run
+    ```
+
+4. **Build for Production**:
+    ```sh
+    flutter build apk --release
+    ```
+
+## Contribution
+
+To contribute to this project, please fork the repository, create a new branch, and submit a pull request.

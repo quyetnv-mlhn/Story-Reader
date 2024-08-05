@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_reader/core/theme/spacing_constants.dart';
 import 'package:story_reader/core/utils/string_extensions.dart';
 import 'package:story_reader/core/utils/theme_extension.dart';
 
@@ -15,13 +16,13 @@ class SearchStoriesBar extends StatelessWidget {
   const SearchStoriesBar({
     super.key,
     this.hintText = 'Search stories...',
-    this.debounceTime = const Duration(milliseconds: 300),
+    this.debounceTime = const Duration(milliseconds: 500),
   });
 
   @override
   Widget build(BuildContext context) {
     return _SearchStoriesBarContent(
-      hintText: hintText,
+      hintText: hintText.hardCoded,
       debounceTime: debounceTime,
     );
   }
@@ -66,15 +67,14 @@ class _SearchStoriesBarContentState extends State<_SearchStoriesBarContent> {
     return TextField(
       controller: _controller,
       decoration: InputDecoration(
-        hintText: widget.hintText.hardCodedString,
+        hintText: widget.hintText,
         prefixIcon: const Icon(Icons.search),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(Spacing.radiusS),
         ),
         filled: theme.inputDecorationTheme.filled,
         fillColor: theme.inputDecorationTheme.fillColor,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        contentPadding: Spacing.appEdgePadding,
       ),
       style: theme.textTheme.bodyLarge,
       onChanged: _onSearchChanged,
