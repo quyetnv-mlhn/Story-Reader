@@ -95,8 +95,9 @@ class ThemeExamples {
     return ElevatedButton(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.hovered))
+          if (states.contains(MaterialState.hovered)) {
             return Theme.of(context).hoverColor;
+          }
           return null;
         }),
       ),
@@ -307,10 +308,10 @@ class ThemeExamples {
     return Material(
       color: Theme.of(context).colorScheme.surface,
       elevation: 8,
-      child: Container(
+      child: const SizedBox(
         height: 100,
         width: 100,
-        child: const Center(child: Text('Elevated Surface')),
+        child: Center(child: Text('Elevated Surface')),
       ),
     );
   }

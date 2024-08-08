@@ -90,9 +90,9 @@ class HomePageView extends StatelessWidget {
         padding: Spacing.appEdgePadding,
         child: PaginatedStoryList(
           state: HomeLoaded(
-            featuredStories: [],
+            featuredStories: const [],
             paginatedStories: state.searchResults,
-            recentlyUpdatedStories: [],
+            recentlyUpdatedStories: const [],
             currentPage: state.currentPage,
             totalPages: state.totalPages,
           ),
