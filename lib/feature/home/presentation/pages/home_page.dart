@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_reader/core/theme/spacing_constants.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:story_reader/feature/home/presentation/bloc/home_event.dart';
@@ -30,30 +31,72 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is HomeLoaded) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SearchStoriesBar(),
-                  FeaturedStories(featuredStories: state.featuredStories),
-                  PaginatedStoryList(state: state),
-                  RecentlyUpdatedStories(
-                    recentlyUpdatedStories: state.recentlyUpdatedStories,
-                  ),
-                ],
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: const CustomAppBar(),
+          body: Column(
+            children: [
+              const Padding(
+                padding: Spacing.appEdgePadding,
+                child: SearchStoriesBar(),
               ),
-            );
-          } else if (state is HomeError) {
-            return Center(child: Text('Error: ${state.message}'));
-          }
-          return Container();
-        },
+              Expanded(
+                child: BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    return switch (state) {
+                      HomeLoading() =>
+                        const Center(child: CircularProgressIndicator()),
+                      HomeLoaded() => _buildLoadedContent(state),
+                      HomeSearchLoaded() => _buildSearchContent(state),
+                      HomeError() =>
+                        Center(child: Text('Error: ${state.message}')),
+                      _ => Container(),
+                    };
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadedContent(HomeLoaded state) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: Spacing.appEdgePadding,
+        child: Column(
+          children: [
+            Spacing.verticalSpaceM,
+            FeaturedStories(featuredStories: state.featuredStories),
+            Spacing.verticalSpaceM,
+            PaginatedStoryList(state: state),
+            Spacing.verticalSpaceM,
+            RecentlyUpdatedStories(
+              recentlyUpdatedStories: state.recentlyUpdatedStories,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchContent(HomeSearchLoaded state) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: Spacing.appEdgePadding,
+        child: PaginatedStoryList(
+          state: HomeLoaded(
+            featuredStories: const [],
+            paginatedStories: state.searchResults,
+            recentlyUpdatedStories: const [],
+            currentPage: state.currentPage,
+            totalPages: state.totalPages,
+          ),
+        ),
       ),
     );
   }

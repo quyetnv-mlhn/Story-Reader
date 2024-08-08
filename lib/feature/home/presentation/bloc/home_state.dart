@@ -18,6 +18,7 @@ class HomeLoaded extends HomeState {
   final List<Story> recentlyUpdatedStories;
   final int currentPage;
   final int totalPages;
+  final String searchQuery;
 
   const HomeLoaded({
     required this.featuredStories,
@@ -25,6 +26,7 @@ class HomeLoaded extends HomeState {
     required this.recentlyUpdatedStories,
     required this.currentPage,
     required this.totalPages,
+    this.searchQuery = '',
   });
 
   @override
@@ -33,8 +35,21 @@ class HomeLoaded extends HomeState {
         paginatedStories,
         recentlyUpdatedStories,
         currentPage,
-        totalPages
+        totalPages,
+        searchQuery,
       ];
+}
+
+class HomeSearchLoaded extends HomeState {
+  final List<Story> searchResults;
+  final int currentPage;
+  final int totalPages;
+
+  const HomeSearchLoaded({
+    required this.searchResults,
+    required this.currentPage,
+    required this.totalPages,
+  });
 }
 
 class HomeError extends HomeState {

@@ -10,12 +10,17 @@ abstract class HomeEvent extends Equatable {
 class LoadHomeData extends HomeEvent {}
 
 class SearchStories extends HomeEvent {
-  final String query;
+  final String title;
 
-  const SearchStories(this.query);
+  final String author;
+
+  const SearchStories({
+    this.title = '',
+    this.author = '',
+  });
 
   @override
-  List<Object> get props => [query];
+  List<Object> get props => [title, author];
 }
 
 class ChangePage extends HomeEvent {
