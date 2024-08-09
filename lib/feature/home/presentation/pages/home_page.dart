@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_reader/core/theme/spacing_constants.dart';
+import 'package:story_reader/core/widgets/lottie_loading_widget.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
-import 'package:story_reader/feature/home/presentation/bloc/home_bloc.dart';
-import 'package:story_reader/feature/home/presentation/bloc/home_event.dart';
-import 'package:story_reader/feature/home/presentation/bloc/home_state.dart';
-import 'package:story_reader/feature/home/presentation/widgets/search_stories_bar.dart';
+import 'package:story_reader/feature/home/bloc/home_bloc.dart';
+import 'package:story_reader/feature/home/bloc/home_event.dart';
+import 'package:story_reader/feature/home/bloc/home_state.dart';
+import 'package:story_reader/feature/home/presentation/pages/all_story_list.dart';
+import 'package:story_reader/feature/home/presentation/pages/new_updated_story_list.dart';
 import 'package:story_reader/injection_container.dart';
 
-import '../../../../core/widgets/custom_app_bar.dart';
-import '../widgets/featured_stories.dart';
-import '../widgets/paginated_story_list.dart';
-import '../widgets/recently_updated_stories.dart';
+import 'package:story_reader/core/widgets/custom_app_bar.dart';
+import 'package:story_reader/feature/home/presentation/pages/featured_stories.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,29 +35,20 @@ class HomePageView extends StatelessWidget {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          appBar: const CustomAppBar(),
-          body: Column(
-            children: [
-              const Padding(
-                padding: Spacing.appEdgePadding,
-                child: SearchStoriesBar(),
-              ),
-              Expanded(
-                child: BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) {
-                    return switch (state) {
-                      HomeLoading() =>
-                        const Center(child: CircularProgressIndicator()),
-                      HomeLoaded() => _buildLoadedContent(state),
-                      HomeSearchLoaded() => _buildSearchContent(state),
-                      HomeError() =>
-                        Center(child: Text('Error: ${state.message}')),
-                      _ => Container(),
-                    };
-                  },
-                ),
-              ),
-            ],
+          appBar: CustomAppBar(
+            onSearchPressed: () {},
+            onSettingsPressed: () {},
+          ),
+          body: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              return switch (state) {
+                HomeLoading() => const LottieLoadingWidget(),
+                HomeLoaded() => _buildLoadedContent(state),
+                // HomeSearchLoaded() => _buildSearchContent(state),
+                HomeError() => Center(child: Text('Error: ${state.message}')),
+                _ => Container(),
+              };
+            },
           ),
         ),
       ),
@@ -66,37 +57,17 @@ class HomePageView extends StatelessWidget {
 
   Widget _buildLoadedContent(HomeLoaded state) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: Spacing.appEdgePadding,
-        child: Column(
-          children: [
-            Spacing.verticalSpaceM,
-            FeaturedStories(featuredStories: state.featuredStories),
-            Spacing.verticalSpaceM,
-            PaginatedStoryList(state: state),
-            Spacing.verticalSpaceM,
-            RecentlyUpdatedStories(
-              recentlyUpdatedStories: state.recentlyUpdatedStories,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchContent(HomeSearchLoaded state) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: Spacing.appEdgePadding,
-        child: PaginatedStoryList(
-          state: HomeLoaded(
-            featuredStories: const [],
-            paginatedStories: state.searchResults,
-            recentlyUpdatedStories: const [],
-            currentPage: state.currentPage,
-            totalPages: state.totalPages,
+      child: Column(
+        children: [
+          FeaturedStories(featuredStories: state.featuredStories),
+          Spacing.verticalSpaceM,
+          NewUpdatedStoryList(
+            stories: state.paginatedStories,
+            onButtonPressed: () {},
           ),
-        ),
+          Spacing.verticalSpaceM,
+          AllStoryList(stories: state.paginatedStories, onButtonPressed: () {}),
+        ],
       ),
     );
   }

@@ -33,6 +33,9 @@ dependencies:
   dio: ^5.5.0+1
   pretty_dio_logger: ^1.4.0
 
+  # logger - to log messages
+  logger: ^2.4.0
+
   # bloc - state management
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
@@ -48,6 +51,10 @@ dependencies:
 
   # theme loader
   json_theme: ^6.4.1+5
+
+  # lottie animations
+  lottie: ^3.1.2
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +75,10 @@ flutter:
   assets:
     - assets/images/
     - assets/theme/
+    - assets/jsons/
+    - .env.dev
+    - .env.staging
+    - .env.production
 
   fonts:
     - family: Roboto

@@ -1,5 +1,5 @@
 import 'package:story_reader/core/utils/network_utils.dart';
-import 'package:story_reader/data/models/story_model.dart';
+import 'package:story_reader/data/models/response/story_model.dart';
 import 'package:story_reader/data/params/search_stories_param.dart';
 
 abstract class StoryRepository {

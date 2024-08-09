@@ -1,6 +1,6 @@
 import 'package:story_reader/core/utils/network_utils.dart';
 import 'package:story_reader/data/datasources/remote/story_remote_data_source.dart';
-import 'package:story_reader/data/models/story_model.dart';
+import 'package:story_reader/data/models/response/story_model.dart';
 import 'package:story_reader/data/params/search_stories_param.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/core/utils/snackbar_handler.dart';

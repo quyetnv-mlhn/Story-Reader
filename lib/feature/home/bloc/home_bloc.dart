@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_reader/data/params/search_stories_param.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'package:story_reader/feature/home/bloc/home_event.dart';
+import 'package:story_reader/feature/home/bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final StoryRepository storyRepository;

@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_theme/json_theme.dart';
+import 'package:logger/logger.dart';
 import 'package:story_reader/app/app.dart';
 import 'package:story_reader/app/app_bloc_observer.dart';
 import 'package:story_reader/core/utils/snackbar_handler.dart';
@@ -33,6 +35,9 @@ void main() async {
   final darkThemeJson = jsonDecode(darkThemeStr);
   final darkTheme = ThemeDecoder.decodeThemeData(darkThemeJson)!;
 
+  //Load environment
+  await dotenv.load(fileName: '.env.staging');
+
   runApp(
     App(
       scaffoldMessengerKey: scaffoldMessengerKey,
@@ -41,3 +46,10 @@ void main() async {
     ),
   );
 }
+
+var logger = Logger(
+  level: Level.info,
+  filter: DevelopmentFilter(),
+  output: ConsoleOutput(),
+  printer: PrettyPrinter(),
+);
