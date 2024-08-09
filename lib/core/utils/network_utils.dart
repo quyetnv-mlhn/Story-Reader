@@ -19,14 +19,14 @@ class Result<T> {
     if (_data != null) {
       return _data;
     }
-    throw StateError("Cannot access data on failure result");
+    throw StateError('Cannot access data on failure result');
   }
 
   AppException get error {
     if (_error != null) {
       return _error;
     }
-    throw StateError("Cannot access error on success result");
+    throw StateError('Cannot access error on success result');
   }
 
   R fold<R>(R Function(T) onSuccess, R Function(AppException) onFailure) {
@@ -35,19 +35,19 @@ class Result<T> {
     } else if (isFailure && _error != null) {
       return onFailure(_error);
     }
-    throw StateError("Invalid state: both data and error are null");
+    throw StateError('Invalid state: both data and error are null');
   }
 
   Result<R> map<R>(R Function(T) transform) {
     return isSuccess && _data != null
         ? Result.success(transform(_data))
-        : Result.failure(_error ?? UnexpectedException("Unknown error"));
+        : Result.failure(_error ?? UnexpectedException('Unknown error'));
   }
 
   Result<R> flatMap<R>(Result<R> Function(T) transform) {
     return isSuccess && _data != null
         ? transform(_data)
-        : Result.failure(_error ?? UnexpectedException("Unknown error"));
+        : Result.failure(_error ?? UnexpectedException('Unknown error'));
   }
 
   /*

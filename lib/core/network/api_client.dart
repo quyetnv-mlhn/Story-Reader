@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:story_reader/core/error/exceptions.dart';
 
-import 'endpoints.dart';
+import 'package:story_reader/core/network/endpoints.dart';
 
 class ApiClient {
   final Dio _dio;
@@ -12,13 +12,9 @@ class ApiClient {
     _dio.options.connectTimeout = const Duration(seconds: 5);
     _dio.options.receiveTimeout = const Duration(seconds: 3);
     _dio.interceptors.add(PrettyDioLogger(
-      requestHeader: false,
       requestBody: true,
       responseHeader: true,
       responseBody: false,
-      error: true,
-      compact: true,
-      maxWidth: 90,
     ));
   }
 

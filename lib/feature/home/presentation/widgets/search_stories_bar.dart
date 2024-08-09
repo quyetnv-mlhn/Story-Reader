@@ -6,8 +6,8 @@ import 'package:story_reader/core/theme/spacing_constants.dart';
 import 'package:story_reader/core/utils/string_extensions.dart';
 import 'package:story_reader/core/utils/theme_extension.dart';
 
-import '../bloc/home_bloc.dart';
-import '../bloc/home_event.dart';
+import 'package:story_reader/feature/home/bloc/home_bloc.dart';
+import 'package:story_reader/feature/home/bloc/home_event.dart';
 
 class SearchStoriesBar extends StatelessWidget {
   final String hintText;

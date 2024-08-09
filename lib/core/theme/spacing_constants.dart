@@ -22,13 +22,13 @@ class Spacing {
   static const EdgeInsets paddingAllL = EdgeInsets.all(spaceL);
 
   // Common horizontal paddings
-  static const EdgeInsets paddingH0 = EdgeInsets.symmetric(horizontal: space0);
+  static const EdgeInsets paddingH0 = EdgeInsets.symmetric();
   static const EdgeInsets paddingHS = EdgeInsets.symmetric(horizontal: spaceS);
   static const EdgeInsets paddingHM = EdgeInsets.symmetric(horizontal: spaceM);
   static const EdgeInsets paddingHL = EdgeInsets.symmetric(horizontal: spaceL);
 
   // Common vertical paddings
-  static const EdgeInsets paddingV0 = EdgeInsets.symmetric(vertical: space0);
+  static const EdgeInsets paddingV0 = EdgeInsets.symmetric();
   static const EdgeInsets paddingVS = EdgeInsets.symmetric(vertical: spaceS);
   static const EdgeInsets paddingVM = EdgeInsets.symmetric(vertical: spaceM);
   static const EdgeInsets paddingVL = EdgeInsets.symmetric(vertical: spaceL);

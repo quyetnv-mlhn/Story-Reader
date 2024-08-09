@@ -1,9 +1,9 @@
 import 'package:story_reader/core/network/api_client.dart';
 import 'package:story_reader/core/network/endpoints.dart';
 import 'package:story_reader/core/utils/network_utils.dart';
-import 'package:story_reader/data/models/paginated_response.dart';
+import 'package:story_reader/data/models/response/paginated_response.dart';
 import 'package:story_reader/data/params/search_stories_param.dart';
-import '../../models/story_model.dart';
+import 'package:story_reader/data/models/response/story_model.dart';
 
 abstract class StoryRemoteDataSource {
   Future<Result<List<Story>>> getStories();
@@ -26,7 +26,7 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
     return handleRequest(() async {
       final queryParameters = {
         'page': 1,
-        'pageSize': 10,
+        'pageSize': 20,
       };
       final response = await _apiClient.get(
         Endpoints.getStories,
