@@ -45,7 +45,12 @@ class HomePageView extends StatelessWidget {
                 HomeLoading() => const LottieLoadingWidget(),
                 HomeLoaded() => _buildLoadedContent(state),
                 // HomeSearchLoaded() => _buildSearchContent(state),
-                HomeError() => Center(child: Text('Error: ${state.message}')),
+                HomeError() => Center(
+                    child: Text(
+                      'Error: ${state.message}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 _ => Container(),
               };
             },

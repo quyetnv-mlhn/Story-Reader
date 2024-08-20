@@ -1,18 +1,28 @@
 import 'package:story_reader/core/network/api_client.dart';
 import 'package:story_reader/core/network/endpoints.dart';
-import 'package:story_reader/core/utils/network_utils.dart';
+import 'package:story_reader/core/network/network_utils.dart';
+import 'package:story_reader/data/models/request/get_stories_request.dart';
+import 'package:story_reader/data/models/request/search_stories_request.dart';
 import 'package:story_reader/data/models/response/paginated_response.dart';
-import 'package:story_reader/data/params/search_stories_param.dart';
 import 'package:story_reader/data/models/response/story_model.dart';
 
 abstract class StoryRemoteDataSource {
-  Future<Result<List<Story>>> getStories();
-  Future<Result<List<Story>>> getStoriesPaginated(int page, int pageSize);
+  Future<Result<PaginatedResponse<Story>>> getStories(
+      {int? page, int? pageSize});
+
   Future<Result<List<Story>>> searchStories(
-      SearchStoriesParam searchStoriesParam);
+    SearchStoriesRequest searchStoriesParam,
+  );
+
   Future<Result<Story>> getStoryDetails(String storyId);
-  // Future<List<Chapter>> getChapters(String storyId);
-  // Future<Chapter> getChapterContent(String chapterId);
+
+  Future<Result<PaginatedResponse<Story>>> getFeaturedStories(
+      {int? page, int? pageSize});
+
+  Future<Result<PaginatedResponse<Story>>> getStoriesRecentlyUpdated({
+    int? page,
+    int? pageSize,
+  });
 }
 
 class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
@@ -22,70 +32,102 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
       : _apiClient = apiClient;
 
   @override
-  Future<Result<List<Story>>> getStories() async {
-    return handleRequest(() async {
-      final queryParameters = {
-        'page': 1,
-        'pageSize': 20,
-      };
-      final response = await _apiClient.get(
-        Endpoints.getStories,
-        queryParameters: queryParameters,
-      );
-      final data =
-          PaginatedResponse<Story>.fromMap(response.data, Story.fromMap);
-      return data.content;
-    });
-  }
+  Future<Result<PaginatedResponse<Story>>> getStories({
+    int? page,
+    int? pageSize,
+  }) async {
+    final queryParameters = GetStoriesRequest(
+      page: page ?? 0,
+      pageSize: pageSize ?? 0,
+    );
 
-  @override
-  Future<Result<List<Story>>> getStoriesPaginated(
-      int page, int pageSize) async {
-    return handleRequest(() async {
-      final response = await _apiClient.get(
+    return handleRequest(
+      () => _apiClient.get(
         Endpoints.getStories,
-        queryParameters: {'page': page, 'pageSize': pageSize},
-      );
-      return (response.data as List)
-          .map((json) => Story.fromMap(json))
-          .toList();
-    });
+        fromJson: (json) => PaginatedResponse.fromMap(json, Story.fromMap),
+        queryParameters: queryParameters.toMap(),
+      ),
+    );
   }
 
   @override
   Future<Result<List<Story>>> searchStories(
-    SearchStoriesParam searchStoriesParam,
-  ) async {
+      SearchStoriesRequest searchStoriesParam) async {
     return handleRequest(() async {
-      final response = await _apiClient.get('/stories/search',
-          queryParameters: searchStoriesParam.toMap());
-      return (response.data as List)
-          .map((json) => Story.fromMap(json))
-          .toList();
+      final response = await _apiClient.get(
+        '/stories/search',
+        fromJson: (json) => Story.fromMap(json),
+        queryParameters: searchStoriesParam.toMap(),
+      );
+
+      final stories =
+          (response.data as List).map((json) => Story.fromMap(json)).toList();
+
+      return ApiResponse<List<Story>>(
+        success: true,
+        message: 'Search results fetched successfully',
+        data: stories,
+      );
     });
   }
 
   @override
-  Future<Result<Story>> getStoryDetails(String storyId) async {
-    return handleRequest(() async {
-      final response = await _apiClient.get('/stories/$storyId');
-      return Story.fromMap(response.data);
-    });
-  }
+  Future<Result<Story>> getStoryDetails(String storyId) => handleRequest(
+        () async {
+          final response = await _apiClient.get('/stories/$storyId',
+              fromJson: (json) => Story.fromMap(json));
 
-  // @override
-  // Future<List<Chapter>> getChapters(String storyId) async {
-  //   return handleRequest(() async {
-  //     final response = await apiClient.get('/stories/$storyId/chapters');
-  //     return (response.data as List).map((json) => Chapter.fromMap(json)).toList();
-  //   });
-  // }
+          return response;
+        },
+      );
 
-  // @override
-  // Future<Chapter> getChapterContent(String chapterId) async {
-  //   return handleRequest(() async {
-  //     final response = await apiClient.get('/chapters/$chapterId');
-  //     return Chapter.fromMap(response.data);
-  //   });
-  // }
+  @override
+  Future<Result<PaginatedResponse<Story>>> getFeaturedStories({
+    int? page,
+    int? pageSize,
+  }) =>
+      handleRequest(() async {
+        final queryParameters = GetStoriesRequest(
+          page: page ?? 1,
+          pageSize: pageSize ?? 5,
+        );
+        return await _apiClient.get(
+          Endpoints.getFeaturedStories,
+          fromJson: (json) => PaginatedResponse.fromMap(json, Story.fromMap),
+          queryParameters: queryParameters.toMap(),
+        );
+      });
+
+  @override
+  Future<Result<PaginatedResponse<Story>>> getStoriesRecentlyUpdated({
+    int? page,
+    int? pageSize,
+  }) =>
+      handleRequest(() async {
+        final queryParameters = GetStoriesRequest(
+          page: page ?? 1,
+          pageSize: pageSize ?? 10,
+        );
+        return await _apiClient.get(
+          Endpoints.getStoriesRecentlyUpdated,
+          fromJson: (json) => PaginatedResponse.fromMap(json, Story.fromMap),
+          queryParameters: queryParameters.toMap(),
+        );
+      });
+
+// @override
+// Future<List<Chapter>> getChapters(String storyId) async {
+//   return handleRequest(() async {
+//     final response = await apiClient.get('/stories/$storyId/chapters');
+//     return (response.data as List).map((json) => Chapter.fromMap(json)).toList();
+//   });
+// }
+
+// @override
+// Future<Chapter> getChapterContent(String chapterId) async {
+//   return handleRequest(() async {
+//     final response = await apiClient.get('/chapters/$chapterId');
+//     return Chapter.fromMap(response.data);
+//   });
+// }
 }

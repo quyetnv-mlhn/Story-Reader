@@ -3,14 +3,16 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:story_reader/core/error/exceptions.dart';
 
 import 'package:story_reader/core/network/endpoints.dart';
+import 'package:story_reader/core/network/network_utils.dart';
+import 'package:story_reader/core/utils/logging_utils.dart';
 
 class ApiClient {
   final Dio _dio;
 
   ApiClient(this._dio) {
     _dio.options.baseUrl = Endpoints.baseUrl;
-    _dio.options.connectTimeout = const Duration(seconds: 5);
-    _dio.options.receiveTimeout = const Duration(seconds: 3);
+    _dio.options.connectTimeout = const Duration(seconds: 10);
+    _dio.options.receiveTimeout = const Duration(seconds: 10);
     _dio.interceptors.add(PrettyDioLogger(
       requestBody: true,
       responseHeader: true,
@@ -18,8 +20,9 @@ class ApiClient {
     ));
   }
 
-  Future<Response> get(
+  Future<ApiResponse<T>> get<T>(
     String path, {
+    required T Function(Map<String, dynamic>) fromJson,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
@@ -33,14 +36,16 @@ class ApiClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
-    } catch (e) {
+      return ApiResponse.fromJson(response.data, fromJson);
+    } catch (e, stackTrace) {
+      logger.e(e, stackTrace: stackTrace);
       throw _handleError(e);
     }
   }
 
-  Future<Response> post(
+  Future<ApiResponse<T>> post<T>(
     String path, {
+    required T Function(Map<String, dynamic>) fromJson,
     dynamic data,
     Options? options,
     CancelToken? cancelToken,
@@ -56,8 +61,9 @@ class ApiClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
-    } catch (e) {
+      return ApiResponse.fromJson(response.data, fromJson);
+    } catch (e, stackTrace) {
+      logger.e(e, stackTrace: stackTrace);
       throw _handleError(e);
     }
   }
@@ -83,13 +89,15 @@ class ApiClient {
               return NetworkException(
                   'Bad response: ${error.response?.statusCode}');
           }
+        case DioExceptionType.connectionError:
+          return NetworkException('Connection error');
         case DioExceptionType.cancel:
           return NetworkException('Request cancelled');
         default:
-          return NetworkException('Unexpected error occurred');
+          return UnexpectedException('Unexpected error occurred');
       }
     } else {
-      return NetworkException('Unexpected error: $error');
+      return UnexpectedException('Unexpected error: $error');
     }
   }
 }

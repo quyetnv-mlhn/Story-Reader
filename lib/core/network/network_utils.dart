@@ -1,5 +1,34 @@
-import 'dart:developer';
 import 'package:story_reader/core/error/exceptions.dart';
+import 'package:story_reader/core/utils/logging_utils.dart';
+
+class ApiResponse<T> {
+  final bool success;
+  final String message;
+  final T? data;
+
+  ApiResponse({required this.success, required this.message, this.data});
+
+  factory ApiResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJson) {
+    return ApiResponse(
+      success: json['success'],
+      message: json['message'],
+      data: json['data'] != null ? fromJson(json['data']) : null,
+    );
+  }
+
+  ApiResponse copyWith({
+    bool? success,
+    String? message,
+    T? data,
+  }) {
+    return ApiResponse(
+      success: success ?? this.success,
+      message: message ?? this.message,
+      data: data ?? this.data,
+    );
+  }
+}
 
 class Result<T> {
   final T? _data;
@@ -10,9 +39,11 @@ class Result<T> {
         _error = error;
 
   factory Result.success(T data) => Result._(data: data);
+
   factory Result.failure(AppException error) => Result._(error: error);
 
   bool get isSuccess => _error == null;
+
   bool get isFailure => _error != null;
 
   T get data {
@@ -74,20 +105,24 @@ class Result<T> {
   String toString() => isSuccess ? 'Success($_data)' : 'Failure($_error)';
 }
 
-Future<Result<T>> handleRequest<T>(Future<T> Function() request) async {
+Future<Result<T>> handleRequest<T>(
+  Future<ApiResponse> Function() request,
+) async {
   try {
-    final data = await request();
-    return Result.success(data);
-  } on NetworkException catch (e) {
-    log('Network error: ${e.message}',
-        error: e, stackTrace: StackTrace.current);
+    final apiResponse = await request();
+    if (apiResponse.success && apiResponse.data != null) {
+      return Result.success(apiResponse.data);
+    } else {
+      return Result.failure(ServerException(apiResponse.message));
+    }
+  } on NetworkException catch (e, stackTrace) {
+    logger.e('Network error occurred', error: e, stackTrace: stackTrace);
     return Result.failure(e);
-  } on AppException catch (e) {
-    log('Application error: ${e.message}',
-        error: e, stackTrace: StackTrace.current);
+  } on AppException catch (e, stackTrace) {
+    logger.e('Application error occurred', error: e, stackTrace: stackTrace);
     return Result.failure(e);
   } catch (e, stackTrace) {
-    log('Unexpected error', error: e, stackTrace: stackTrace);
+    logger.e('Unexpected error occurred', error: e, stackTrace: stackTrace);
     return Result.failure(UnexpectedException(e.toString()));
   }
 }

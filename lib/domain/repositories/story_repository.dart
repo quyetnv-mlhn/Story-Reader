@@ -1,13 +1,27 @@
-import 'package:story_reader/core/utils/network_utils.dart';
+import 'package:story_reader/core/network/network_utils.dart';
+import 'package:story_reader/data/models/request/search_stories_request.dart';
+import 'package:story_reader/data/models/response/paginated_response.dart';
 import 'package:story_reader/data/models/response/story_model.dart';
-import 'package:story_reader/data/params/search_stories_param.dart';
 
 abstract class StoryRepository {
-  Future<Result<List<Story>>> getStories();
-  Future<Result<List<Story>>> getStoriesPaginated(int page, int pageSize);
+  Future<Result<PaginatedResponse<Story>>> getStories({
+    int? page,
+    int? pageSize,
+  });
+
+  Future<Result<PaginatedResponse<Story>>> getFeaturedStories(
+      {int? page, int? pageSize});
+
+  Future<Result<PaginatedResponse<Story>>> getStoriesRecentlyUpdated({
+    int? page,
+    int? pageSize,
+  });
+
   Future<Result<List<Story>>> searchStories(
-      SearchStoriesParam searchStoriesParam);
+    SearchStoriesRequest searchStoriesParam,
+  );
+
   Future<Result<Story>> getStoryDetails(String storyId);
-  // Future<List<Chapter>> getChapters(String storyId);
-  // Future<Chapter> getChapterContent(String chapterId);
+// Future<List<Chapter>> getChapters(String storyId);
+// Future<Chapter> getChapterContent(String chapterId);
 }

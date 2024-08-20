@@ -38,17 +38,24 @@ class StoryCard extends StatelessWidget {
                   Text(
                     story.title ?? 'Unknown'.hardCoded,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     story.author ?? 'Anonymous'.hardCoded,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[700],
-                    ),
+                          color: Colors.grey[700],
+                        ),
                     maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    story.description ?? 'No description available'.hardCoded,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

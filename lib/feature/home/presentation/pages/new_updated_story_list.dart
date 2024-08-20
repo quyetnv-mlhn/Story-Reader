@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_reader/core/theme/spacing_constants.dart';
+import 'package:story_reader/core/utils/date_time_utils.dart';
 import 'package:story_reader/data/models/response/story_model.dart';
 import 'package:story_reader/feature/home/presentation/widgets/story_item.dart';
 import 'package:story_reader/feature/home/presentation/widgets/header_row.dart';
@@ -21,7 +22,7 @@ class NewUpdatedStoryList extends StatelessWidget {
     this.title = 'Mới cập nhật',
     this.buttonText = 'Xem Thêm',
     required this.onButtonPressed,
-    this.height = 250,
+    this.height = 180,
     this.titleStyle,
     this.buttonTextStyle,
     this.dividerColor = Colors.grey,
@@ -37,10 +38,7 @@ class NewUpdatedStoryList extends StatelessWidget {
         children: [
           HeaderRow(
             title: title,
-            buttonText: buttonText,
-            onButtonPressed: onButtonPressed,
             titleStyle: titleStyle,
-            buttonTextStyle: buttonTextStyle,
             dividerThickness: dividerThickness,
           ),
           Spacing.verticalSpaceM,
@@ -49,13 +47,14 @@ class NewUpdatedStoryList extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: stories.length,
-              separatorBuilder: (context, index) => Spacing.horizontalSpaceM,
+              separatorBuilder: (context, index) => Spacing.horizontalSpaceS,
               itemBuilder: (context, index) {
                 final story = stories[index];
                 return StoryItem(
                   imageUrl: story.coverImage ?? '',
                   title: story.title ?? '',
-                  chapter: story.author ?? '',
+                  chapter: story.chapter,
+                  lastUpdate: DateTimeUtils.getFormattedDate(story.lastUpdate),
                 );
               },
             ),

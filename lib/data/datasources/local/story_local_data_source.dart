@@ -1,4 +1,4 @@
-import 'package:story_reader/core/utils/network_utils.dart';
+import 'package:story_reader/core/network/network_utils.dart';
 import 'package:story_reader/data/models/response/story_model.dart';
 
 abstract class StoryLocalDataSource {

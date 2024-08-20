@@ -6,7 +6,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearchPressed;
   final VoidCallback onSettingsPressed;
 
-  const CustomAppBar({super.key,
+  const CustomAppBar({
+    super.key,
     required this.onSearchPressed,
     required this.onSettingsPressed,
   });

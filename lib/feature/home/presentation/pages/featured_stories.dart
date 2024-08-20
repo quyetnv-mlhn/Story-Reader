@@ -16,7 +16,7 @@ class FeaturedStories extends StatelessWidget {
 
     return CarouselSlider(
       options: CarouselOptions(
-        height: 300.0,
+        height: 250.0,
         autoPlay: true,
         viewportFraction: 1,
         enlargeCenterPage: true,
@@ -26,7 +26,7 @@ class FeaturedStories extends StatelessWidget {
           builder: (BuildContext context) {
             return Container(
               width: MediaQuery.of(context).size.width,
-              margin: Spacing.appEdgePadding,
+              margin: Spacing.paddingHM,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Spacing.radiusL),
                 boxShadow: [
@@ -43,7 +43,7 @@ class FeaturedStories extends StatelessWidget {
                   children: [
                     CachedImageWidget(
                       imageUrl: story.coverImage ?? '',
-                      height: 300,
+                      height: 250,
                       width: MediaQuery.of(context).size.width,
                     ),
                     Container(

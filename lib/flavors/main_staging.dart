@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_theme/json_theme.dart';
-import 'package:logger/logger.dart';
 import 'package:story_reader/app/app.dart';
 import 'package:story_reader/app/app_bloc_observer.dart';
 import 'package:story_reader/core/utils/snackbar_handler.dart';
@@ -46,10 +45,3 @@ void main() async {
     ),
   );
 }
-
-var logger = Logger(
-  level: Level.info,
-  filter: DevelopmentFilter(),
-  output: ConsoleOutput(),
-  printer: PrettyPrinter(),
-);

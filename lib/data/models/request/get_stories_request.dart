@@ -1,17 +1,16 @@
-class GetStoriesParams {
-  final int? page;
-  final int? pageSize;
+import 'package:story_reader/data/models/request/base_request.dart';
 
+class GetStoriesRequest extends BaseRequest {
 //<editor-fold desc="Data Methods">
-  const GetStoriesParams({
-    this.page,
-    this.pageSize,
+  const GetStoriesRequest({
+    required super.page,
+    required super.pageSize,
   });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is GetStoriesParams &&
+      (other is GetStoriesRequest &&
           runtimeType == other.runtimeType &&
           page == other.page &&
           pageSize == other.pageSize);
@@ -24,16 +23,18 @@ class GetStoriesParams {
     return 'GetStoriesParams{ page: $page, pageSize: $pageSize,}';
   }
 
-  GetStoriesParams copyWith({
+  @override
+  GetStoriesRequest copyWith({
     int? page,
     int? pageSize,
   }) {
-    return GetStoriesParams(
+    return GetStoriesRequest(
       page: page ?? this.page,
       pageSize: pageSize ?? this.pageSize,
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'page': page,
@@ -41,8 +42,8 @@ class GetStoriesParams {
     };
   }
 
-  factory GetStoriesParams.fromMap(Map<String, dynamic> map) {
-    return GetStoriesParams(
+  factory GetStoriesRequest.fromMap(Map<String, dynamic> map) {
+    return GetStoriesRequest(
       page: map['page'] as int,
       pageSize: map['pageSize'] as int,
     );
