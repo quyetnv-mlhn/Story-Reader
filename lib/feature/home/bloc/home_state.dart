@@ -57,3 +57,12 @@ class HomeError extends HomeState {
   @override
   List<Object> get props => [message];
 }
+
+class SearchResultsLoaded extends HomeState {
+  final List<Story> stories;
+
+  const SearchResultsLoaded({required this.stories});
+
+  @override
+  List<Object> get props => [stories];
+}

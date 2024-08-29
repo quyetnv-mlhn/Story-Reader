@@ -5,7 +5,6 @@ import 'package:story_reader/data/datasources/local/story_local_data_source.dart
 import 'package:story_reader/data/datasources/remote/story_remote_data_source.dart';
 import 'package:story_reader/data/repositories/story_repository_impl.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
-import 'package:story_reader/feature/home/bloc/home_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -28,5 +27,5 @@ Future<void> initDependencyInjection() async {
     ),
   );
 
-  sl.registerFactory(() => HomeBloc(storyRepository: sl<StoryRepository>()));
+  // sl.registerFactory(() => HomeBloc(storyRepository: sl<StoryRepository>()));
 }

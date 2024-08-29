@@ -29,16 +29,10 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<Result<List<Story>>> searchStories(
+  Future<Result<PaginatedResponse<Story>>> searchStories(
     SearchStoriesRequest searchStoriesParam,
-  ) async {
-    try {
-      return await remoteDataSource.searchStories(searchStoriesParam);
-    } catch (e) {
-      SnackBarHandler.showError('Failed to search stories: $e');
-      throw Exception('Failed to search stories');
-    }
-  }
+  ) =>
+      remoteDataSource.searchStories(searchStoriesParam);
 
   @override
   Future<Result<PaginatedResponse<Story>>> getFeaturedStories({

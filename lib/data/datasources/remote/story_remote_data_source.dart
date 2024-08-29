@@ -10,7 +10,7 @@ abstract class StoryRemoteDataSource {
   Future<Result<PaginatedResponse<Story>>> getStories(
       {int? page, int? pageSize});
 
-  Future<Result<List<Story>>> searchStories(
+  Future<Result<PaginatedResponse<Story>>> searchStories(
     SearchStoriesRequest searchStoriesParam,
   );
 
@@ -51,24 +51,15 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<Result<List<Story>>> searchStories(
+  Future<Result<PaginatedResponse<Story>>> searchStories(
       SearchStoriesRequest searchStoriesParam) async {
-    return handleRequest(() async {
-      final response = await _apiClient.get(
-        '/stories/search',
-        fromJson: (json) => Story.fromMap(json),
+    return handleRequest(
+      () => _apiClient.get(
+        Endpoints.getStories,
+        fromJson: (json) => PaginatedResponse.fromMap(json, Story.fromMap),
         queryParameters: searchStoriesParam.toMap(),
-      );
-
-      final stories =
-          (response.data as List).map((json) => Story.fromMap(json)).toList();
-
-      return ApiResponse<List<Story>>(
-        success: true,
-        message: 'Search results fetched successfully',
-        data: stories,
-      );
-    });
+      ),
+    );
   }
 
   @override

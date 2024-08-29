@@ -17,7 +17,7 @@ abstract class StoryRepository {
     int? pageSize,
   });
 
-  Future<Result<List<Story>>> searchStories(
+  Future<Result<PaginatedResponse<Story>>> searchStories(
     SearchStoriesRequest searchStoriesParam,
   );
 

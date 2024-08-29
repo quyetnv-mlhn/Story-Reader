@@ -1,22 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_reader/core/theme/spacing_constants.dart';
 import 'package:story_reader/core/utils/string_extensions.dart';
 import 'package:story_reader/core/utils/theme_extension.dart';
 
-import 'package:story_reader/feature/home/bloc/home_bloc.dart';
-import 'package:story_reader/feature/home/bloc/home_event.dart';
-
 class SearchStoriesBar extends StatelessWidget {
   final String hintText;
   final Duration debounceTime;
+  final ValueChanged<String> onSearch;
 
   const SearchStoriesBar({
     super.key,
     this.hintText = 'Search stories...',
     this.debounceTime = const Duration(milliseconds: 500),
+    required this.onSearch,
   });
 
   @override
@@ -24,6 +22,7 @@ class SearchStoriesBar extends StatelessWidget {
     return _SearchStoriesBarContent(
       hintText: hintText.hardCoded,
       debounceTime: debounceTime,
+      onSearch: onSearch,
     );
   }
 }
@@ -31,10 +30,12 @@ class SearchStoriesBar extends StatelessWidget {
 class _SearchStoriesBarContent extends StatefulWidget {
   final String hintText;
   final Duration debounceTime;
+  final ValueChanged<String> onSearch;
 
   const _SearchStoriesBarContent({
     required this.hintText,
     required this.debounceTime,
+    required this.onSearch,
   });
 
   @override
@@ -56,7 +57,7 @@ class _SearchStoriesBarContentState extends State<_SearchStoriesBarContent> {
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(widget.debounceTime, () {
-      context.read<HomeBloc>().add(SearchStories(title: query));
+      widget.onSearch(query);
     });
   }
 

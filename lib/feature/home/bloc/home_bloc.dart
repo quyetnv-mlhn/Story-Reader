@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_reader/core/utils/snackbar_handler.dart';
-import 'package:story_reader/data/models/request/search_stories_request.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/feature/home/bloc/home_event.dart';
 import 'package:story_reader/feature/home/bloc/home_state.dart';
@@ -10,7 +9,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc({required this.storyRepository}) : super(HomeInitial()) {
     on<LoadHomeData>(_onLoadHomeData);
-    on<SearchStories>(_onSearchStories);
     // on<ChangePage>(_onChangePage);
   }
 
@@ -45,28 +43,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       SnackBarHandler.showError(errorMessage);
       emit(HomeError(errorMessage));
     }
-  }
-
-  Future<void> _onSearchStories(
-    SearchStories event,
-    Emitter<HomeState> emit,
-  ) async {
-    emit(HomeLoading());
-
-    final searchParam = SearchStoriesRequest(
-      title: event.title,
-      author: event.author,
-    );
-    final searchResults = await storyRepository.searchStories(searchParam);
-
-    searchResults.fold(
-      (result) => emit(HomeSearchLoaded(
-        searchResults: result,
-        currentPage: 1,
-        totalPages: 1,
-      )),
-      (error) => emit(HomeError(error.toString())),
-    );
   }
 
 // Future<void> _onChangePage(ChangePage event, Emitter<HomeState> emit) async {

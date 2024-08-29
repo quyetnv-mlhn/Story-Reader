@@ -93,9 +93,6 @@ class Story {
   }
 
   factory Story.fromMap(Map<String, dynamic> map) {
-    // logger.i(map);
-    print(map);
-    print(map['id']);
     return Story(
       id: map['id'] as int,
       title: map['title'] as String,

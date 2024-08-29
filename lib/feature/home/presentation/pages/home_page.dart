@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_reader/core/theme/spacing_constants.dart';
+import 'package:story_reader/core/widgets/custom_app_bar.dart';
 import 'package:story_reader/core/widgets/lottie_loading_widget.dart';
 import 'package:story_reader/domain/repositories/story_repository.dart';
 import 'package:story_reader/feature/home/bloc/home_bloc.dart';
 import 'package:story_reader/feature/home/bloc/home_event.dart';
 import 'package:story_reader/feature/home/bloc/home_state.dart';
 import 'package:story_reader/feature/home/presentation/pages/all_story_list.dart';
-import 'package:story_reader/feature/home/presentation/pages/new_updated_story_list.dart';
-import 'package:story_reader/injection_container.dart';
-
-import 'package:story_reader/core/widgets/custom_app_bar.dart';
 import 'package:story_reader/feature/home/presentation/pages/featured_stories.dart';
+import 'package:story_reader/feature/home/presentation/pages/new_updated_story_list.dart';
+import 'package:story_reader/feature/search/presentation/pages/search_page.dart';
+import 'package:story_reader/injection_container.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,8 +36,13 @@ class HomePageView extends StatelessWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: CustomAppBar(
-            onSearchPressed: () {},
+            onSearchPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return const SearchPage();
+              }));
+            },
             onSettingsPressed: () {},
+            title: 'Home',
           ),
           body: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {

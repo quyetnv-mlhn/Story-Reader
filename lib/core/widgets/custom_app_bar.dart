@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:story_reader/gen/assets.gen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final PreferredSizeWidget? bottom;
   final VoidCallback onSearchPressed;
   final VoidCallback onSettingsPressed;
 
@@ -10,6 +11,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.onSearchPressed,
     required this.onSettingsPressed,
+    required this.title,
+    this.bottom,
   });
 
   @override
@@ -18,6 +21,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: Text(title),
+      bottom: bottom,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.asset(
